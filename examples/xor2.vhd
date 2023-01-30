@@ -7,7 +7,7 @@ ENTITY xor2 is
         I2 : IN STD_LOGIC;
         Y : OUT STD_LOGIC
     );
-END xor2;
+END ENTITY xor2;
 
 architecture dataflow OF xor2 is
 begin

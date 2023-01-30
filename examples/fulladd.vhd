@@ -7,15 +7,15 @@ ENTITY fulladd is
         x : IN STD_LOGIC;
         y : IN STD_LOGIC;
         cin : in STD_LOGIC;
-        s : OUT STD_LOGIC;
+        sum : OUT STD_LOGIC;
         cout: OUT STD_LOGIC
     );
-END fulladd;
+END ENTITY fulladd;
 
-architecture fullad_dataflow OF fulladd is
+architecture fulladd_dataflow OF fulladd is
 begin
-    
-    s <= x XOR y XOR cin;
+    -- Dataflow implementation describes gate level implementation
+    sum <= x XOR y XOR cin;
     cout <= (x AND y) OR (cin AND x) OR (cin AND y);
 
-end fullad_dataflow;
+end fulladd_dataflow;

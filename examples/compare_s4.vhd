@@ -7,13 +7,13 @@ use ieee.std_logic_signed.all; -- Use SIGNED integer library
 
 ENTITY compare_s4 IS
     PORT(
-        A : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- 4 bit channel A in
-        B : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- 4 bit channel B in
+        A : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- 4 bit channel A in (MSB = 3)
+        B : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- 4 bit channel B in (MSB = 3)
         AeqB : OUT STD_LOGIC; -- If A == B (1 bit OUT)
         AgtB : OUT STD_LOGIC; -- If A > B  (1 bit OUT)
         AltB : OUT STD_LOGIC  -- If A < B  (1 bit OUT)
     );
-END compare_s4;
+END ENTITY compare_s4;
 
 architecture dataflow OF compare_s4 IS
 

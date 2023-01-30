@@ -3,11 +3,11 @@ use ieee.std_logic_1164.all; -- Use all definitions from steady state logic pack
 
 ENTITY decode2to4 IS
     PORT(
-        w : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+        w : IN STD_LOGIC_VECTOR(1 DOWNTO 0); -- 2 bit bus w in
         En : IN STD_LOGIC;
-        y : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+        y : OUT STD_LOGIC_VECTOR(3 DOWNTO 0) -- 4 bit bus y out
     );
-end decode2to4;
+end ENTITY decode2to4;
 
 architecture dataflow OF decode2to4 IS
     SIGNAL ENw : STD_LOGIC_VECTOR(2 DOWNTO 0);

@@ -7,7 +7,7 @@ ENTITY pri4to2encode IS
         y : OUT STD_LOGIC_VECTOR(1 DOWNTO 0); -- 2 bit output
         z : OUT STD_LOGIC
     );
-END pri4to2encode;
+END ENTITY pri4to2encode;
 
 architecture dataflow OF pri4to2encode IS
 

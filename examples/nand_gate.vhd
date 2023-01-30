@@ -7,7 +7,7 @@ ENTITY nand_gate is
         b : IN STD_LOGIC;
         z : OUT STD_LOGIC -- No Semi Colon Here
     );
-END nand_gate;
+END ENTITY nand_gate;
 
 architecture model of nand_gate is
 

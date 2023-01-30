@@ -7,7 +7,7 @@ ENTITY mux_cascade IS
         s1, s2 : IN STD_LOGIC;
         f : OUT STD_LOGIC
     );
-END mux_cascade;
+END ENTITY mux_cascade;
     
 architecture dataflow OF mux_cascade is
 

@@ -8,7 +8,7 @@ ENTITY mux2to1 is
         s : IN STD_LOGIC;
         f : OUT STD_LOGIC
     );
-END mux2to1;
+END ENTITY mux2to1;
 
 architecture dataflow OF mux2to1 is
 begin

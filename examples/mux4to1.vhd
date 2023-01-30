@@ -7,10 +7,10 @@ ENTITY mux4to1 IS
         w1 : IN STD_LOGIC;
         w2 : IN STD_LOGIC;
         w3 : IN STD_LOGIC;
-        s : IN STD_LOGIC_VECTOR(1 DOWNTO 0); -- 2 bit signal selector
+        s : IN STD_LOGIC_VECTOR(1 DOWNTO 0); -- 2 bit signal selector [ 1 = MSB, 0 = LSB ]
         f : OUT STD_LOGIC
     );
-END mux4to1;
+END ENTITY mux4to1;
 
 architecture dataflow OF mux4to1 IS
 begin

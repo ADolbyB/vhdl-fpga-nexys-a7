@@ -5,7 +5,7 @@ architecture structural OF xor3_gate IS
 
 SIGNAL U1_OUT : STD_LOGIC;
 
-COMPONENT xor2
+COMPONENT xor2 IS 
     PORT(
         I1 : IN STD_LOGIC;
         I2 : IN STD_LOGIC;

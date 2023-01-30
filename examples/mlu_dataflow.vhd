@@ -3,10 +3,10 @@ use ieee.std_logic_1164.all;
 
 architecture mlu_dataflow of mlu is
 
-signal A1:STD_LOGIC;
-signal B1:STD_LOGIC;
-signal Y1:STD_LOGIC;
-signal MUX_0, MUX_1, MUX_2, MUX_3: STD_LOGIC;
+signal A1 : std_logic;
+signal B1 : std_logic;
+signal Y1 : std_logic;
+signal MUX_0, MUX_1, MUX_2, MUX_3 : std_logic;
 
 begin
     A1 <= A when (NEG_A='0') else

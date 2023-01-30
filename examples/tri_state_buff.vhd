@@ -7,7 +7,7 @@ ENTITY tri_state_buff IS
         x : IN STD_LOGIC;
         f : OUT STD_LOGIC
     );
-END tri_state_buff;
+END ENTITY tri_state_buff;
 
 architecture dataflow OF tri_state_buff IS
 begin

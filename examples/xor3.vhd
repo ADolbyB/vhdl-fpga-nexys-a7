@@ -8,7 +8,7 @@ ENTITY xor3 is
         C : IN STD_LOGIC;
         Y : OUT STD_LOGIC
     );
-end xor3;
+end ENTITY xor3;
 
 architecture dataflow OF xor3 is
 begin

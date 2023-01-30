@@ -7,13 +7,13 @@ use ieee.std_logic_unsigned.all; -- Use UNSIGNED integer library
 
 ENTITY compare_u4 IS
     PORT(
-        A : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- 4 bit channel A in
-        B : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- 4 bit channel B in
+        A : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- 4 bit bus: channel A in
+        B : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- 4 bit bus: channel B in
         AeqB : OUT STD_LOGIC; -- If A == B (1 bit OUT)
         AgtB : OUT STD_LOGIC; -- If A > B  (1 bit OUT)
         AltB : OUT STD_LOGIC  -- If A < B  (1 bit OUT)
     );
-END compare_u4;
+END ENTITY compare_u4;
 
 architecture dataflow OF compare_u4 IS
 
