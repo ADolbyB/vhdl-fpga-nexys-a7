@@ -1,6 +1,15 @@
 library ieee; -- Library declaration
 use ieee.std_logic_1164.all; -- Use all definitions from steady state logic package
 
+entity xor3_gate is
+    port (
+        A : in std_logic;
+        B : in std_logic;
+        C : in std_logic;
+        Result : out std_logic
+    );
+end entity xor3_gate;
+
 architecture structural OF xor3_gate IS
 
 SIGNAL U1_OUT : STD_LOGIC;
