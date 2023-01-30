@@ -11,22 +11,21 @@ ENTITY cmpl_sig IS
     );
 END ENTITY cmpl_sig;
 
-architecture logic OF cmpl_sig IS
+architecture behavioral OF cmpl_sig IS
 begin
-    -- This architecture defines 
-    -- simple signal assignment
+    -- This architecture defines simple signal assignment
     x <= (a AND NOT sel) OR (b AND sel);
 
-    -- conditional signal assignment
+    -- conditional signal assignment (priority logic)
     y <= a WHEN sel = '0' ELSE b;
     
-    -- Selected signal assignment
+    -- Selected signal assignment (parallel logic)
     WITH sel SELECT
         z <= a WHEN '0',
              b WHEN '1',
             '0' WHEN OTHERS;
 
-END architecture logic;
+END architecture behavioral;
  
 configuration cmpl_sig_conf OF cmpl_sig IS
     FOR logic

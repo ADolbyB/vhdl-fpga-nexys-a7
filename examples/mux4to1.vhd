@@ -1,3 +1,8 @@
+-- Joel Brigida
+-- CDA 4240C: Digital Design Lab
+-- This is a DATAFLOW example of a 4to1 mux.
+-- Demostrates use of WITH/SELECT parallel logic
+
 library ieee; -- Library declaration
 use ieee.std_logic_1164.all; -- Use all definitions from steady state logic package
 
@@ -14,7 +19,7 @@ END ENTITY mux4to1;
 
 architecture dataflow OF mux4to1 IS
 begin
-    
+    -- Parallel Logic: all have equal priority
     WITH s SELECT
         f <= w0 WHEN "00", -- double quotes when more than 1 bit signal
              w1 WHEN "01",
