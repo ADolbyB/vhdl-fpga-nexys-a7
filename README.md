@@ -1,4 +1,4 @@
-# FPGA VHDL Code
+# VHDL Code for FPGAs
 
 This is a collection of code from CDA 4240C: Design of Digital Systems.
 
