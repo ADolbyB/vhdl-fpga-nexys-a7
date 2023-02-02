@@ -1,3 +1,7 @@
+-- Joel Brigida
+-- CDA 4240C: Digital Design Lab
+-- This is the test bench for simulation.
+
 library ieee;
 use ieee. std_logic_1164.all;
 use ieee. std_logic_arith.all;
@@ -33,8 +37,8 @@ begin
     begin
         for i in 0 to 3 loop
             for j in 0 to 3 loop
-                X_in <= conv_std_logic_vector (i , 2);
-                Y_in <= conv_std_logic_vector (j , 2);
+                X_in <= conv_std_logic_vector (i, 2);
+                Y_in <= conv_std_logic_vector (j, 2);
                 wait for 100 ns;
             end loop;
         end loop;

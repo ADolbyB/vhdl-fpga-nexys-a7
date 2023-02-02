@@ -1,3 +1,10 @@
+-- Joel Brigida
+-- CDA 4240C: Digital Design Lab
+-- This Lab uses 4 switches and 4 LEDs on the FPGA
+-- When both 2 bit inputs match, all LEDs illuminate.
+-- If the Inputs do not match, the LEDs are not lit.
+-- LEDS illuminate with inputs: 0000, 0101, 1010, 1111
+
 library ieee;
 use ieee.std_logic_1164.all;
 
