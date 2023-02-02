@@ -13,7 +13,7 @@ entity if_then_else is
         X : in std_logic_vector(1 downto 0);
         Y : in std_logic_vector(1 downto 0);
         Z : out std_logic
-    );
+        );
 end if_then_else;
 
 architecture behavioral of if_then_else is
@@ -38,7 +38,7 @@ entity when_else is
         X : in std_logic_vector(1 downto 0);
         Y : in std_logic_vector(1 downto 0);
         Z : out std_logic
-    );
+        );
 end when_else;
 
 architecture dataflow of when_else is
@@ -57,7 +57,7 @@ entity boolean_equation is
         X : in std_logic_vector(1 downto 0);
         Y : in std_logic_vector(1 downto 0);
         Z : out std_logic
-    );
+        );
 end boolean_equation;
 
 architecture dataflow of boolean_equation is
@@ -85,7 +85,7 @@ entity LUT_primitive is
         X : in std_logic_vector(1 downto 0);
         Y : in std_logic_vector(1 downto 0);
         Z : out std_logic
-    );
+        );
 end LUT_primitive;
 
 architecture primitive of LUT_primitive is
@@ -99,7 +99,7 @@ architecture primitive of LUT_primitive is
             I1 => X(1), -- LUT input
             I2 => Y(0), -- LUT input
             I3 => Y(1)  -- LUT input
-        );
+            );
 end primitive;
 
 library ieee;
@@ -109,8 +109,8 @@ entity comparator_top is
     port(
         X : in std_logic_vector(1 downto 0);
         Y : in std_logic_vector(1 downto 0);
-        Z : out std_logic
-    );
+        Z : out std_logic_vector(3 downto 0)
+        );
 end comparator_top;
 
 architecture structural of comparator_top is
@@ -154,24 +154,24 @@ begin
             X => X,
             Y => Y,
             Z => Z(3)
-        );
+            );
     when_else0 : when_else
         port map(
             X => X,
             Y => Y,
             Z => Z(2)
-        );
+            );
     boolean_equation0 : boolean_equation 
         port map(
             X => X,
             Y => Y,
             Z => Z(1)
-        );
+            );
     LUT_primitive0 : LUT_primitive 
         port map(
             X => X,
             Y => Y,
             Z => Z(0)
-        );
+            );
 end structural;
 
