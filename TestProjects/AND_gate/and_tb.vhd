@@ -21,7 +21,7 @@ architecture bench of and_gate_tb is
 
   signal a: std_logic;
   signal b: std_logic;
-  signal c: std_logic ;
+  signal c: std_logic;
 
 begin
 

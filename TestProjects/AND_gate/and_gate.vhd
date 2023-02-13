@@ -1,3 +1,7 @@
+-- Joel Brigida
+-- CDA 4240C: Digital Design Lab
+-- AND gate test program
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 
