@@ -1,3 +1,8 @@
+-- Joel Brigida
+-- CDA 4240C: Digital Design Lab
+-- This is a dataflow model for a BCD to 7 segment display.
+-- This is for a Common Cathode Display: Logic '1' required to illuminate segments
+
 library IEEE;
 use ieee.std_logic_1164.all;
 
@@ -18,16 +23,16 @@ begin
             "1111001" when "0011", -- Displays '3'
             "0110011" when "0100", -- Displays '4'
             "1011011" when "0101", -- Displays '5'
-            "1111110" when "0110", -- Displays '6'
-            "1111110" when "0111", -- Displays '7'
-            "1111110" when "1000", -- Displays '8'
-            "1111110" when "1001", -- Displays '9'
-            "1111110" when "1010", -- Displays 'A'
-            "1111110" when "1011", -- Displays 'b'
-            "1111110" when "1100", -- Displays 'C'
-            "1111110" when "1101", -- Displays 'd'
-            "1111110" when "1110", -- Displays 'E'
-            "1111110" when "1111", -- Displays 'F'
+            "0011111" when "0110", -- Displays '6'
+            "1110000" when "0111", -- Displays '7'
+            "1111111" when "1000", -- Displays '8'
+            "1100011" when "1001", -- Displays '9'
+            "1110111" when "1010", -- Displays 'A'
+            "0011111" when "1011", -- Displays 'b'
+            "1001110" when "1100", -- Displays 'C'
+            "0111101" when "1101", -- Displays 'd'
+            "1001111" when "1110", -- Displays 'E'
+            "1000111" when "1111", -- Displays 'F'
             "0000000" when OTHERS;
 
 end dataflow;
