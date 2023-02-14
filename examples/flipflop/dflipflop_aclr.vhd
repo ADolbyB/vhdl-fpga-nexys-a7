@@ -12,9 +12,9 @@ ENTITY dflipflop_aclr IS
     );
 END ENTITY dflipflop_aclr;
 
-ARCHITECTURE rtl OF dflipflop_aclr IS
+ARCHITECTURE behavioral OF dflipflop_aclr IS
 BEGIN
-    PROCESS (clk, clr)
+    PROCESS (clk, clr) -- Clear / Reset is sensitive.
     BEGIN
         IF clr = '0' THEN -- asynchronous process triggered
             q <= '0';     -- 'q' stays cleared as long as 'clr' == 0
@@ -22,4 +22,4 @@ BEGIN
             q <= d;
         END IF;
     END PROCESS;
-END ARCHITECTURE rtl;
+END ARCHITECTURE behavioral;

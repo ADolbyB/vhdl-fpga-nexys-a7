@@ -12,7 +12,7 @@ ENTITY dflipflop_sclr IS
     );
 END ENTITY dflipflop_sclr;
 
-ARCHITECTURE rtl OF dflipflop_sclr IS
+ARCHITECTURE behavioral OF dflipflop_sclr IS
 BEGIN
     PROCESS (clk)
     BEGIN
@@ -24,4 +24,4 @@ BEGIN
             END IF;
         END IF;
     END PROCESS;
-END ARCHITECTURE rtl;
+END behavioral;

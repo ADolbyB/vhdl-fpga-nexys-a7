@@ -12,7 +12,7 @@ ENTITY dflipflop_aclr_ena IS
     );
 END ENTITY dflipflop_aclr_ena;
 
-ARCHITECTURE rtl OF dflipflop_aclr_ena IS
+ARCHITECTURE behavioral OF dflipflop_aclr_ena IS
 BEGIN
     PROCESS (clk, clr)
     BEGIN
@@ -24,4 +24,4 @@ BEGIN
             END IF;
         END IF;
     END PROCESS;
-END ARCHITECTURE rtl;
+END ARCHITECTURE behavioral;
