@@ -12,7 +12,7 @@ Entity BCD_to_7segment is
         BCD : in std_logic_vector(3 downto 0); -- 4 bit BCD signal
         DISP : out std_logic_vector(6 downto 0) -- 7 Segment Display
     );
-End Entity BCD_to_7Segment;
+End Entity BCD_to_7segment;
 
 Architecture dataflow of BCD_to_7segment is
 
@@ -29,6 +29,7 @@ begin
             "1110000" when "0111", -- Displays '7'
             "1111111" when "1000", -- Displays '8'
             "1100011" when "1001", -- Displays '9'
-            "0000000" when OTHERS;
+            "-------" when OTHERS; -- Don't Care about other cases
+         -- "0000000" when OTHERS; -- Turn Off Display
 
 end dataflow;

@@ -28,7 +28,8 @@ BEGIN
             WHEN "0111" => SEGMENTS <= "1110000"; -- Displays '7'
             WHEN "1000" => SEGMENTS <= "1111111"; -- Displays '8'
             WHEN "1001" => SEGMENTS <= "1110011"; -- Displays '9'
-            WHEN OTHERS => SEGMENTS <= "0000000"; -- Turn off display
+            WHEN OTHERS => SEGMENTS <= "-------"; -- "Don't Care" about other cases.
+         -- WHEN OTHERS => SEGMENTS <= "0000000"; -- Turn off display
         END CASE;
     END PROCESS;
 END Behavior;
