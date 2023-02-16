@@ -23,7 +23,7 @@ begin
     process (ResetN, Clock) -- Async Reset / Clear
     begin
         if ResetN = '0' then
-            Q <= (OTHERS => 0); -- Set all N bits to 0
+            Q <= (OTHERS => '0'); -- Set all N bits to 0
         elsif rising_edge(Clock) then
             Q <= D;
         end if;
