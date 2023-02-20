@@ -25,5 +25,6 @@ begin
                 "00010000" WHEN "1100",
                 "00100000" WHEN "1101",
                 "01000000" WHEN "1110",
+                "10000000" WHEN "1111",
                 "00000000" WHEN OTHERS;
 end dataflow;
