@@ -21,7 +21,7 @@ architecture behavioral of reg_file_tb is
         );
 end component;
 
-    constant PERIOD : time := 20 ns; -- Constant for Clock Period
+    constant PERIOD : time := 20 ns;
     
     signal clk_tb : std_logic;                    
     signal rst_tb : std_logic;                    
@@ -31,7 +31,10 @@ end component;
     signal dout_tb : std_logic_vector(3 downto 0);
 
 begin
-
+    -- Format:
+    -- LABEL : COMPONENT
+    -- PORT MAP (
+    --  );
     reg_file_inst : reg_file
     
     PORT MAP (
@@ -55,13 +58,17 @@ begin
     begin -- Can use FOR LOOP to make code more concise
         -- Test Write To Registers for Waveform
 
-        rst_tb <= '1'; -- Disable RESET to prevent UNDEFINED value (Active Low)
         we_tb <= '1';  -- Enable Writing
+        rst_tb <= '0'; -- Reset all registers to 0000 before writing
+        wait for 2 ns;
+        rst_tb <= '1'; -- Disable RESET to prevent UNDEFINED value (Active Low)
+        wait for 2 ns;
+        
         addr_tb <= "000"; -- Write to Register 0
         din_tb <= "0111"; -- give it a random value
         wait for PERIOD;
         
-        addr_tb <= "001"; -- Write to Register 1
+        addr_tb <= "001"; -- Write to Register 1;
         din_tb <= "1101";
         wait for PERIOD;
         
@@ -69,8 +76,24 @@ begin
         din_tb <= "1010";
         wait for PERIOD;
         
+        addr_tb <= "011"; -- Write to Register 3
+        din_tb <= "1110";
+        wait for PERIOD;
+        
+        addr_tb <= "100"; -- Write to Register 4
+        din_tb <= "0101";
+        wait for PERIOD;
+        
+        addr_tb <= "101"; -- Write to Register 5
+        din_tb <= "0110";
+        wait for PERIOD;
+        
         addr_tb <= "110"; -- Write to Register 6
-        din_tb <= "1011";
+        din_tb <= "1001";
+        wait for PERIOD;
+        
+        addr_tb <= "111"; -- Write to Register 7
+        din_tb <= "1101";
         wait for PERIOD;
         
         -- DONE Writing
@@ -78,28 +101,44 @@ begin
         wait for PERIOD;
         
         -- Read the registers
-        addr_tb <= "000"; -- DOUT = 0111
+        addr_tb <= "000"; -- Reg 0: DOUT = 0111
         wait for PERIOD;
-        addr_tb <= "001"; -- DOUT = 1101
+        addr_tb <= "001"; -- Reg 1: DOUT = 1101
         wait for PERIOD;
-        addr_tb <= "010"; -- DOUT = 1010
+        addr_tb <= "010"; -- Reg 2: DOUT = 1010
         wait for PERIOD;
-        addr_tb <= "110"; -- DOUT = 1011
+        addr_tb <= "011"; -- Reg 3: DOUT = 1110
+        wait for PERIOD;
+        addr_tb <= "100"; -- Reg 4: DOUT = 0101
+        wait for PERIOD;
+        addr_tb <= "101"; -- Reg 5: DOUT = 0110
+        wait for PERIOD;
+        addr_tb <= "110"; -- Reg 6: DOUT = 1001
+        wait for PERIOD;
+        addr_tb <= "111"; -- Reg 7: DOUT = 1111
         wait for PERIOD;
         
         -- Reset all registers
         rst_tb <= '0';
-        wait for 1 ns;
+        wait for 2 ns;
         rst_tb <= '1';
         
         -- Read registers again: should all be 0000
-        addr_tb <= "000"; -- DOUT = 0000
+        addr_tb <= "000"; -- Reg 0: DOUT = 0000
         wait for PERIOD;
-        addr_tb <= "001"; -- DOUT = 0000
+        addr_tb <= "001"; -- Reg 1: DOUT = 0000
         wait for PERIOD;
-        addr_tb <= "010"; -- DOUT = 0000
+        addr_tb <= "010"; -- Reg 2: DOUT = 0000
         wait for PERIOD;
-        addr_tb <= "110"; -- DOUT = 0000
+        addr_tb <= "011"; -- Reg 3: DOUT = 0000
+        wait for PERIOD;
+        addr_tb <= "100"; -- Reg 4: DOUT = 0000
+        wait for PERIOD;
+        addr_tb <= "101"; -- Reg 5: DOUT = 0000
+        wait for PERIOD;
+        addr_tb <= "110"; -- Reg 6: DOUT = 0000
+        wait for PERIOD;
+        addr_tb <= "111"; -- Reg 7: DOUT = 0000
         wait for PERIOD;
         
         wait; -- Stop Simulation (otherwise it will keep looping)
