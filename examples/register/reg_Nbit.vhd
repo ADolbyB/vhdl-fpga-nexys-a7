@@ -7,9 +7,8 @@ library IEEE;
 USE IEEE.std_logic_1164.all;
 
 Entity reg_Nbit is
-    generic (
-        N : integer := 16 -- Generic Declaration for N = 16 bits
-    );
+    generic (N : integer := 16); -- Generic Declaration for N = 16 bits
+
     PORT (
         Clock, ResetN : IN std_logic;
         D : IN std_logic_vector(N-1 downto 0);
