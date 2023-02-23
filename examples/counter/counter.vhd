@@ -10,7 +10,7 @@ use ieee.std_logic_unsigned.all;
 entity counter is
     port (
         clk, rst : in std_logic;
-        q : out std_logic_vector(15 DOWNTO 0) -- 16 bit signal        
+        q : out std_logic_vector(15 DOWNTO 0) -- 16 bit counter       
     );
 end entity counter;
 
