@@ -1,6 +1,10 @@
 -- Joel Brigida
 -- CDA 4240C: Digital Design Lab
+-- Practice Exam Question 9
 -- This is a 16 bit variable arithmetic shifter which rotates right.
+-- Operation Perormed: Z = X >> Y
+-- X is a 16 bit signed.
+-- Y is an 8 bit unsigned.
 -- This is a DATAFLOW example using FOR-GENERATE statements.
 
 library IEEE;
