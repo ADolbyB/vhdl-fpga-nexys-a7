@@ -63,38 +63,38 @@ signal mux_in : array_8of4;
 
 begin
 
-decoder_instantiate : decoder_3to8 -- inputs and outputs of component
-port map (
-        en => we,       -- PORT(COMPONENT) => WRAPPER(TOP LAYER)
-        din => addr,    -- PORT(COMPONENT) => WRAPPER(TOP LAYER)
-        dout => reg_en  -- PORT(COMPONENT) => WRAPPER(TOP LAYER)
-    );
-    
-mux_instantiate : mux_8to1
-generic map (n => 4)
-port map (
-        sel  => addr,
-        din0 => mux_in(0),
-        din1 => mux_in(1),
-        din2 => mux_in(2),
-        din3 => mux_in(3),
-        din4 => mux_in(4),
-        din5 => mux_in(5),
-        din6 => mux_in(6),
-        din7 => mux_in(7),
-        dout => dout
-    );
-    
-reg_module_generate : for i in 0 to 7 generate
-    reg_module_instantiate : reg_module
-    generic map (n => 4) -- Connecting REGISTERS to the MUX
-    port map (
-        clk => clk,
-        rst => rst,
-        we => reg_en(i),
-        din => din,
-        dout => mux_in(i) -- REG_OUT => MUX_IN
-    );
+    decoder_instantiate : decoder_3to8 -- inputs and outputs of component
+        port map (
+                en => we,       -- PORT(COMPONENT) => WRAPPER(TOP LAYER)
+                din => addr,    -- PORT(COMPONENT) => WRAPPER(TOP LAYER)
+                dout => reg_en  -- PORT(COMPONENT) => WRAPPER(TOP LAYER)
+            );
+        
+    mux_instantiate : mux_8to1
+        generic map (n => 4)
+        port map (
+                sel  => addr,
+                din0 => mux_in(0),
+                din1 => mux_in(1),
+                din2 => mux_in(2),
+                din3 => mux_in(3),
+                din4 => mux_in(4),
+                din5 => mux_in(5),
+                din6 => mux_in(6),
+                din7 => mux_in(7),
+                dout => dout
+            );
+        
+    reg_module_generate : for i in 0 to 7 generate
+        reg_module_instantiate : reg_module
+            generic map (n => 4) -- Connecting REGISTERS to the MUX
+            port map (
+                clk => clk,
+                rst => rst,
+                we => reg_en(i),
+                din => din,
+                dout => mux_in(i) -- REG_OUT => MUX_IN
+            );
 end generate;
 
 end architecture structural;
