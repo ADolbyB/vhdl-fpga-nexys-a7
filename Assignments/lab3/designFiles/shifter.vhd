@@ -1,15 +1,10 @@
 -- Joel Brigida
 -- CDA 4240C: Digital Design Lab
--- This file is for the bit shifter. 
--- The Shifter takes a 6 bit input A and 3 bit input B.
--- Logic Shift Left:
-    -- If SEL = "00" or "01", then SHIFT_OUT becomes A shifted LEFT by B bits.
--- Logic Shift Right:
-    -- If SEL = "10", then SHIFT_OUT becomes A shifted RIGHT by B bits.
--- Arithmetic Shift Right:
-    -- If SEL = "11", then SHIFT_OUT becomes A shifted RIGHT by B bits. MSB of A is preserves.
+-- This file is for the bit shifter that takes a 6 bit input A and 3 bit input B.
+-- Logic Shift Left: If SEL = "00" or "01", then SHIFT_OUT becomes A shifted LEFT by B bits.
+-- Logic Shift Right: If SEL = "10", then SHIFT_OUT becomes A shifted RIGHT by B bits.
+-- Arithmetic Shift Right: If SEL = "11", then SHIFT_OUT becomes A shifted RIGHT by B bits. MSB of A is preserved.
 -- Note that B is only 3 bits, so the maximum bits that can be shifted is 111 or 7 bits.
-
 
 library IEEE;
 use ieee.std_logic_1164.all;
@@ -50,10 +45,10 @@ begin
     Arith_Right <= std_logic_vector(shift_right(A_signed, B_Integer));
 
     WITH SEL SELECT
-        SHIFT_OUT <= Logic_Left WHEN "00",     -- Logic Shift Left
-                        Logic_Left WHEN "01",  -- Logic Shift Left
-                        Logic_Right WHEN "10", -- Logic Shift Right
-                        Arith_Right WHEN "11", -- Arith Shift Right
-                        "000000" WHEN OTHERS;  -- Default Case
+        SHIFT_OUT <= Logic_Left WHEN "00",  -- Logic Shift Left
+                     Logic_Left WHEN "01",  -- Logic Shift Left
+                     Logic_Right WHEN "10", -- Logic Shift Right
+                     Arith_Right WHEN "11", -- Arith Shift Right
+                     "000000" WHEN OTHERS;  -- Default Case
 
 end dataflow;
