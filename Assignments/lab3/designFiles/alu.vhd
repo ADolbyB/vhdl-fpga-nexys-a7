@@ -19,10 +19,6 @@ entity alu is
 end entity alu;
 
 architecture structural of alu is
-    -- add the constants N and M
-    -- define the internal components
-    -- define temporary internal signals for each unit
-
 
 component adder is
     generic(N : integer := 6);
