@@ -7,19 +7,19 @@ use ieee.std_logic_1164.all;
 
 entity fulladder is
     port (
-        x : in std_logic;
-        y : in std_logic;
-        cin : in std_logic;
-        cout : out std_logic;
-        sum : out std_logic
+        X : in std_logic;
+        Y : in std_logic;
+        CIN : in std_logic;
+        SUM : out std_logic
+        COUT : out std_logic
     );
 end entity fulladder;
 
 architecture dataflow of fulladder is
-begin -- Concurrent assignment
-    
-    sum <= x XOR y XOR cin;
-    cout <= (x AND y) OR (cin AND x) OR (cin AND y);
+begin 
+    -- Concurrent assignment
+    SUM <= X XOR Y XOR CIN;
+    COUT <= (X AND Y) OR (CIN AND (A XOR B));
 
 end dataflow;
 
@@ -39,8 +39,8 @@ architecture structure of adder4bit is
 
 component fulladder
     port (
-        x, y, cin : in std_logic;
-        cout, sum : out std_logic
+        X, Y, CIN : in std_logic;
+        COUT, SUM : out std_logic
     );
 end component;
 
