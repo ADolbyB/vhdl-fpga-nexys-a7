@@ -1,0 +1,1 @@
+create clock -period 10 -name clk [get ports clk]
