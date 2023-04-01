@@ -18,13 +18,13 @@ END ENTITY full_adder;
 
 architecture dataflow OF full_adder is
     -- Define Intermediate Signal
-    signal AB : STD_LOGIC;
+    signal A_B : STD_LOGIC;
 begin
 
-    AB <= A XOR B; 
-    SUM <= AB XOR CIN;
-    COUT <= (A AND B) OR (AB AND CIN);
-
+    A_B <= A XOR B; 
+    SUM <= A_B XOR CIN;
+    COUT <= (A AND B) OR (A_B AND CIN);
+    
 end dataflow;
 
 -- CARRY_SAVE_MULT COMPONENT
@@ -54,57 +54,61 @@ architecture structural of carry_save_mult is
 
     -- variable array of n-bit std_logic_vector
     type arr2d is array (integer range <>) of std_logic_vector(n-1 downto 0);
-    signal ab : arr2d(0 to n-1); -- signal ab has dimensions (n x n): AND gate array
+    signal AB : arr2d(0 to N-1); -- signal ab has dimensions (n x n): AND gate array
 
     -- full_adder signals, all have dimension ((n-1) x n)
-    signal FA_a    : arr2d(0 to n-2);
-    signal FA_b    : arr2d(0 to n-2);
-    signal FA_cin  : arr2d(0 to n-2);
-    signal FA_sum  : arr2d(0 to n-2);
-    signal FA_cout : arr2d(0 to n-2);
-    signal PROD    : arr2d(0 to 2*n-1); -- Product of Multiplication
+    signal FA_a    : arr2d(0 to N-2);
+    signal FA_b    : arr2d(0 to N-2);
+    signal FA_cin  : arr2d(0 to N-2);
+    signal FA_sum  : arr2d(0 to N-2);
+    signal FA_cout : arr2d(0 to N-2);
     
 begin
-    -- ab(0)(n-1)
-    GEN_AB_ROWS: for i in 0 to n-1 generate
-        GEN_AB_COLS: for j in 0 to n-1 generate
-            AB(i)(j) <= A(i) AND B(j); -- Generate AND gate array signal outputs
-        end generate;                  -- ab(i)(j) = a(i) AND b(j)
+
+    GEN_AB_ROWS : for i in 0 to N-1 generate
+        GEN_AB_COLS : for j in 0 to N-1 generate
+            AB(i)(j) <= A(i) AND B(j);      -- Generate AND gate array signal outputs
+        end generate;                       -- ab(i)(j) = a(i) AND b(j)
+    end generate;
+
+    GEN_FA_ROWS : for i in 0 to N-2 generate
+        GEN_FA_COLS : for j in 0 to N-1 generate
+            FULLADD_inst : full_adder       -- Instantiate ((n - 1) x n) Full Adder Components
+                PORT MAP(
+                    A => FA_a(i)(j),
+                    B => FA_b(i)(j),
+                    CIN => FA_cin(i)(j),
+                    COUT => FA_cout(i)(j),
+                    SUM => FA_sum(i)(j)
+                );        
+        end generate;
     end generate;
     
-    -- Figure 3 shows that we will use ((n-1) x n) full adders
-    -- use nested for-generate to instantiate each full_adder component.
-    -- ports are mapped to each bit of the 2D-arrays FA_a, FA_b, FA_cin, FA_sum, FA_cout
-
-    -- after instantiating the full adders, we need to assign values 
-    -- for the inputs of the FAs.
-    -- use the three patterns from the pdf to complete this part
-    -- and assign values to each row.
-
-    -- First row: Row 0 Of Adders
-    FA_a(0) <= '0' & AB(0)(N-1 downto 0); -- Input A
-    FA_b(0) <= AB(1)(N-1 downto 0); -- Input B
+    FA_a(0) <= '0' & AB(0)(N-1 downto 1);   -- Input A
+    FA_b(0) <= AB(1)(N-1 downto 0);         -- Input B
     FA_cin(0) <= AB(2)(N-2 downto 0) & '0'; -- Carry In
     
     -- Intermediate rows: Rows 1 to N-3
-    -- (need an array)
-    FA_a(i) <= AB(i+1)(N-1) & FA_sum(i-1)(N-1 downto 1);
-    FA_b(i) <= FA_cout(i-1)(N-1 downto 0);
-    FA_cin(i) <= AB(i+2)(N-2 downto 0) & '0';
+    GEN_FA_MID_BLK : For i in 1 to N-3 GENERATE
+        FA_a(i) <= AB(i+1)(N-1) & FA_sum(i-1)(N-1 downto 1);
+        FA_b(i) <= FA_cout(i-1)(N-1 downto 0);
+        FA_cin(i) <= AB(i+2)(N-2 downto 0) & '0';
+    END Generate;
     
     -- Last Row N-2 of Adders
     FA_a(N-2) <= AB(N-1)(N-1) & FA_sum(N-3)(N-1 downto 1);
     FA_b(N-2) <= FA_cout(N-3)(N-1 downto 0);
-    FA_cin(N-2) <= AB(N-2)(N-2 downto 0) & '0';
-
-    genProduct : for i in 0 to n-2 GENERATE
-        PROD(i) <= PROD(i-1);
+    FA_cin(N-2) <= FA_cout(N-2)(N-2 downto 0) & '0';
+    
+    -- Compute Product:
+    P(0) <= AB(0)(0);                               -- 1st bit has no adder to ab(0)(0) (Bit 0)
+    GEN_PROD_BLK_1 : for i in 1 to N-2 generate
+        P(i) <= FA_sum(i-1)(0);                     -- 1st Group Of Adders (Bits 1 to 6)
     end generate;
-    -- finally, do the last steps to compute the product.
-    -- These are the signals along the bottom of the block schematic
-    -- Product:
-    -- 1st assign Bit0 to ab(0)(0)
-
+    GEN_PROD_BLK_2 : for i in 1 to N generate
+        P(i+N-2) <= FA_sum(N-2)(i-1);               -- 2nd Group Of Adders (Bits 7 to 14)
+    end generate;
+    P(2*N-1) <= FA_cout(N-2)(N-1);                  -- Final COUT for Last Adder (Bit 15)
 
 end structural;
 
@@ -116,8 +120,8 @@ ENTITY mult is
     GENERIC(N : integer := 8);
     PORT(
         CLK : IN STD_LOGIC;
-        A : IN std_logic_vector(N-1 downto 0);      -- 8 bit inputs
-        B : IN std_logic_vector(N-1 downto 0);
+        A_mult : IN std_logic_vector(N-1 downto 0); -- 8 bit inputs
+        B_mult : IN std_logic_vector(N-1 downto 0);
         PROD : OUT std_logic_vector(2*N-1 downto 0) -- 16 bit output
     );
 END mult;
@@ -141,7 +145,7 @@ architecture structural of mult is
     
 begin
 
-    c_s_m : carry_save_mult -- instantiate carry_save_mult & create Port Map
+    CSM : carry_save_mult -- instantiate carry_save_mult & create Port Map
         GENERIC MAP(N => N)
         PORT MAP(
             A => A_reg,
@@ -149,12 +153,13 @@ begin
             P => PROD_s
         );
     
-
-    reg_mult : process(clk)
+    reg_mult : process(CLK)
     begin
-        if rising_edge(clk) then
+        if rising_edge(CLK) then
             -- on the rising edge, make the signals equal
             -- to the inputs and outputs carry_save_mult
+            A_reg <= A_mult;
+            B_reg <= B_mult;
             PROD <= PROD_s;
             
         end if;
