@@ -20,11 +20,11 @@ END ENTITY full_adder;
 
 architecture dataflow OF full_adder is
     -- Define Intermediate Signal
-    signal AB : STD_LOGIC;
+    signal A_B : STD_LOGIC;
 begin
 
-    AB <= A XOR B; 
-    SUM <= AB XOR CIN;
-    COUT <= (A AND B) OR (AB AND CIN);
-
+    A_B <= A XOR B; 
+    SUM <= A_B XOR CIN;
+    COUT <= (A AND B) OR (A_B AND CIN);
+    
 end dataflow;
