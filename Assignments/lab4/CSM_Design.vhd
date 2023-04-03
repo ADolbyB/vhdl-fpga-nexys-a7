@@ -1,6 +1,8 @@
 -- Joel Brigida
 -- CDA 4240C: Digital Design Lab
 -- This is the complete Carry-Save Multiplier in one file.
+-- This Program performs binary multiplication of 2 8-bit binary inputs via onboard switches
+-- The output is displayed as a binary result with the 16 onboard LEDs
 
 -- FULL_ADDER COMPONENT
 library ieee;
