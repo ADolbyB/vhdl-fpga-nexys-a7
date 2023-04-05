@@ -31,12 +31,6 @@ use IEEE.NUMERIC_STD.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 entity vending_machine_subsystem is
     Port ( 
         -- inputs
@@ -53,20 +47,17 @@ entity vending_machine_subsystem is
         error_amt       : out std_logic;
         error_reserved  : out std_logic;
         coin_reject     : out std_logic;
-        deposit_amt     : out std_logic_vector(11 downto 0);
+        deposit_amt     : out std_logic_vector(11 downto 0)
     );
 end vending_machine_subsystem;
 
 architecture Behavioral of vending_machine_subsystem is
-    
-    
+
     signal soda       : std_logic_vector(3 downto 0);   -- signal for user soda input
     signal coin_type  : std_logic_vector(2 downto 0);   -- signal for user coin type
     signal coin_value : std_logic_vector(4 downto 0);   -- 5 bits supports 0-31 values: $0.25
     signal soda_value : std_logic_vector(8 downto 0);   -- 9 bits supports 0-511 values: $3.00
 
-
 begin
-
 
 end Behavioral;
