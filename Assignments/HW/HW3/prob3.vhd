@@ -16,7 +16,7 @@ entity prob3 is
         Z : out STD_LOGIC;
         INIT : out STD_LOGIC;
         WRITE : out STD_LOGIC;
-        LOAD : out STD_LOGIC;
+        LOAD : out STD_LOGIC
     );
 end prob3;
 

@@ -14,7 +14,7 @@ entity prob4 is
         B : in STD_LOGIC;
         P : out STD_LOGIC;
         R : out STD_LOGIC;
-        Y : out STD_LOGIC;
+        Y : out STD_LOGIC
     );
 end prob4;
 
