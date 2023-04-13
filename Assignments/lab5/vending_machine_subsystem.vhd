@@ -22,13 +22,13 @@ begin
     WITH soda_sel SELECT soda_price
         <= X"037" WHEN "0000", -- Soda 0 = $0.55
            X"055" WHEN "0001", -- Soda 1 = $0.85
-           X"05F" WHEN "0010", -- Soda 2 = $0.95
-           X"07D" WHEN "0011", -- Soda 3 = $1.25
-           X"087" WHEN "0100", -- Soda 4 = $1.35
-           X"096" WHEN "0101", -- Soda 5 = $1.50
-           X"0E1" WHEN "0110", -- Soda 6 = $2.25
-           X"0FA" WHEN "0111", -- Soda 7 = $2.50
-           X"12C" WHEN "1000", -- Soda 8 = $3.00
+           X"05F" WHEN "0010", -- Soda 1 = $0.95
+           X"07D" WHEN "0011", -- Soda 1 = $1.25
+           X"087" WHEN "0100", -- Soda 1 = $1.35
+           X"096" WHEN "0101", -- Soda 1 = $1.50
+           X"0E1" WHEN "0110", -- Soda 1 = $2.25
+           X"0FA" WHEN "0111", -- Soda 1 = $2.50
+           X"12C" WHEN "1000", -- Soda 1 = $3.00
            X"000" WHEN OTHERS; -- Soda Reserved
            
     -- soda_reserved <= '1' WHEN soda_sel > "1000" ELSE '0'; -- Set Soda Reserved Flag for Invalid Sodas.
@@ -69,28 +69,45 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity deposit_register is
     Port ( 
-            -- inputs
+        -- inputs
         clk      : in std_logic;
         rst      : in std_logic;    
         incr     : in std_logic;
         incr_amt : in std_logic_vector(11 downto 0);
         decr     : in std_logic;
         decr_amt : in std_logic_vector(11 downto 0);
-            --outputs
+        --outputs
         amt      : out std_logic_vector(11 downto 0)
     );
 end deposit_register;
 
 architecture Behavioral of deposit_register is
     
-    -- Add Architecture
-
+    SIGNAL INCREMENT_AMT : std_logic_vector(11 downto 0);
+    SIGNAL DECREMENT_AMT : std_logic_vector(11 downto 0);
+    SIGNAL TOTAL_AMT : std_logic_vector(11 downto 0);
+    
 begin
+    
+    DEP_REG : PROCESS(rst, clk)
+    BEGIN
+        IF rising_edge(CLK) THEN
+            IF (rst = '0') THEN
+                amt <= (OTHERS => '0'); -- Reset Deposit Amount To $0.00            
+            ELSIF (incr = '1') THEN
+                INCREMENT_AMT <= incr_amt;
+            ELSIF (decr = '1') THEN
+                DECREMENT_AMT <= decr_amt;
+            END IF;
+        END IF;
+    END PROCESS;
+    
+    -- Need to add the increments or decrements to the amount 
 
 end Behavioral;
 
-
--- FINITE STATE MACHINE: when pushing a coin, coin is rejected if deposit amount > $10.00
+-- FINITE STATE MACHINE
+-- Note that when pushing a coin, the coin is rejected when the deposit amount exceeds $10.00
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
@@ -125,10 +142,9 @@ architecture Behavioral of vending_machine_ctrl is
     SIGNAL VEND_STATE : STATE;
 
 begin
-
     -- Case Statements for Each State
     FSM_Vend : PROCESS(CLK, RST)
-    begin
+    BEGIN
         IF(rst = '0') THEN
             VEND_STATE <= IDLE;
         ELSIF rising_edge(CLK) THEN
@@ -186,12 +202,12 @@ begin
     END PROCESS;
 
     -- Outputs For State Cases
-    deposit_incr <= '1' WHEN (STATE = COIN_ACCEPT) ELSE '0';
-    coin_reject <= '1' WHEN (STATE = COIN_DECLINE) ELSE '0';
-    deposit_decr <= '1' WHEN (STATE = SODA_ACCEPT) ELSE '0';
-    error_amt <= '1' WHEN (STATE = SODA_DECLINE_AMT) ELSE '0';
-    soda_drop <= '1' WHEN (STATE = SODA_ACCEPT_WAIT) ELSE '0';
-    error_reserved <= '1' WHEN (STATE = SODA_DECLINE_RESERVED) ELSE '0';
+    deposit_incr <= '1' WHEN (VEND_STATE = COIN_ACCEPT) ELSE '0';
+    coin_reject <= '1' WHEN (VEND_STATE = COIN_DECLINE) ELSE '0';
+    deposit_decr <= '1' WHEN (VEND_STATE = SODA_ACCEPT) ELSE '0';
+    error_amt <= '1' WHEN (VEND_STATE = SODA_DECLINE_AMT) ELSE '0';
+    soda_drop <= '1' WHEN (VEND_STATE = SODA_ACCEPT_WAIT) ELSE '0';
+    error_reserved <= '1' WHEN (VEND_STATE = SODA_DECLINE_RESERVED) ELSE '0';
 
 end Behavioral;
 
@@ -206,6 +222,7 @@ ENTITY vending_machine_subsystem is
         clk             : in std_logic;
         rst             : in std_logic;
         soda_sel        : in std_logic_vector(3 downto 0);
+        soda_req        : in std_logic;
         lock            : in std_logic;
         coin_push       : in std_logic;
         coin_sel        : in std_logic_vector(1 downto 0);
@@ -218,7 +235,7 @@ ENTITY vending_machine_subsystem is
         coin_reject     : out std_logic;
         deposit_amt     : out std_logic_vector(11 downto 0)
     );
-END entity;
+END vending_machine_subsystem;
 
 architecture Behavioral of vending_machine_subsystem is
     
@@ -239,14 +256,14 @@ architecture Behavioral of vending_machine_subsystem is
     
     component deposit_register is
         Port ( 
-                -- inputs
+            -- inputs
             clk      : in std_logic;
             rst      : in std_logic;
             incr     : in std_logic;
             incr_amt : in std_logic_vector(11 downto 0);
             decr     : in std_logic;
             decr_amt : in std_logic_vector(11 downto 0);
-                --outputs
+            --outputs
             amt      : out std_logic_vector(11 downto 0)
         );
     end component;
@@ -272,11 +289,11 @@ architecture Behavioral of vending_machine_subsystem is
             error_reserved : out std_logic
             );
     end component;
-    
+
     -- Soda List
-    signal soda_price_signal     : std_logic_vector(11 downto 0);
-    signal soda_select_signal    : std_logic_vector(3 downto 0);
-    signal soda_reserved_signal  : std_logic;
+    signal soda_price_list       : std_logic_vector(11 downto 0);
+    signal soda_select_list      : std_logic_vector(3 downto 0);
+    signal soda_reserved_list    : std_logic;
     
     -- Coin List
     signal coin_select_signal    : std_logic_vector(1 downto 0);
@@ -295,8 +312,8 @@ architecture Behavioral of vending_machine_subsystem is
     signal vend_clk_signal       : std_logic;
     signal vend_rst_signal       : std_logic;
     signal lock_signal           : std_logic;
-    signal soda_reserved_signal  : std_logic;
-    signal soda_price_signal     : std_logic_vector(11 downto 0);
+    signal soda_reserved_ctrl    : std_logic;
+    signal soda_price_ctrl       : std_logic_vector(11 downto 0);
     signal soda_req_signal       : std_logic;
     signal deposit_amt_signal    : std_logic_vector(11 downto 0);
     signal coin_push_signal      : std_logic;
@@ -306,51 +323,52 @@ architecture Behavioral of vending_machine_subsystem is
     signal deposit_decr_signal   : std_logic;
     signal coin_reject_signal    : std_logic;
     signal error_amt_signal      : std_logic;
-    signal error_reserved_signal : std_logic
+    signal error_reserved_signal : std_logic;
 
 begin
 
     SODA_LIST_INST : soda_list
     PORT MAP(
-        soda_price => soda_price_signal,
-        soda_sel => soda_select_signal,
-        soda_reserved => soda_reserved_signal       
+        soda_price => soda_price_list,
+        soda_sel => soda_select_list,
+        soda_reserved => soda_reserved_list
     );
 
     COIN_LIST_INST : coin_list
     PORT MAP(
-        coin_sel => coin_select_signal;
+        coin_sel => coin_select_signal,
         coin_amt => coin_amount_signal
     );
 
     DEPOSIT_REG_INST : deposit_register
     PORT MAP(
-        clk => depreg_clk_signal;
-        rst => depreg_rst_signal;
-        incr => incr_signal;
-        incr_amt => incr_amt_signal;
-        decr => decr_signal;
-        decr_amt => decr_amt_signal
+        clk => depreg_clk_signal,
+        rst => depreg_rst_signal,
+        incr => incr_signal,
+        incr_amt => incr_amt_signal,
+        decr => decr_signal,
+        decr_amt => decr_amt_signal,
         amt => amt_signal
     );
 
     VEND_CONTROL_INST : vending_machine_ctrl
     PORT MAP(
-        clk => vend_clk_signal;
-        rst => vend_rst_signal;
-        lock => lock_signal;
-        soda_reserved => soda_reserved_signal;
-        soda_price => soda_price_signal;
-        soda_req => soda_req_signal;
-        deposit_amt => deposit_amt_signal;
-        coin_push => coin_push_signal;
-        coin_amt => coin_amt_signal;
-        soda_drop => soda_drop_signal;
-        deposit_incr => deposit_incr_signal;
-        deposit_decr => deposit_decr_signal;
-        coin_reject => coin_reject_signal;
-        error_amt => error_amt_signal;
-        error_reserved => error_reserved_signal;
+        clk => vend_clk_signal,
+        rst => vend_rst_signal,
+        lock => lock_signal,
+        soda_reserved => soda_reserved_ctrl,
+        soda_price => soda_price_ctrl,
+        soda_req => soda_req_signal,
+        deposit_amt => deposit_amt_signal,
+        coin_push => coin_push_signal,
+        coin_amt => coin_amt_signal,
+        soda_drop => soda_drop_signal,
+        deposit_incr => deposit_incr_signal,
+        deposit_decr => deposit_decr_signal,
+        coin_reject => coin_reject_signal,
+        error_amt => error_amt_signal,
+        error_reserved => error_reserved_signal
     );
+
 
 end Behavioral;
