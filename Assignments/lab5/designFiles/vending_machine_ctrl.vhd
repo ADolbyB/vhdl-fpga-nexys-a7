@@ -1,8 +1,6 @@
 -- Joel Brigida
 -- CDA 4240C: Digital Design Lab
--- This is the FSM Finite State Machine of the Vending Machine
--- Note that when pushing a coin, the coin is rejected when the deposit amount
--- exceeds $10.00
+-- This is the Finite State Machine Controller for the Vending Machine Subsystem
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -10,24 +8,25 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity vending_machine_ctrl is
     Port ( 
-        -- inputs
-        clk             : in std_logic;
-        rst             : in std_logic;
-        lock            : in std_logic;
-        soda_reserved   : in std_logic;
-        soda_price      : in std_logic_vector(11 downto 0);
-        soda_req        : in std_logic;
-        deposit_amt     : in std_logic_vector(11 downto 0);
-        coin_push       : in std_logic;
-        coin_amt        : in std_logic_vector(11 downto 0);
-        --outputs
-        soda_drop       : out std_logic;
-        deposit_incr    : out std_logic;
-        deposit_decr    : out std_logic;
-        coin_reject     : out std_logic;
-        error_amt       : out std_logic;
-        error_reserved  : out std_logic
+            -- inputs
+        clk            : in std_logic;
+        rst            : in std_logic;
+        lock           : in std_logic;
+        soda_reserved  : in std_logic;
+        soda_price     : in std_logic_vector(11 downto 0);
+        soda_req       : in std_logic;
+        deposit_amt    : in std_logic_vector(11 downto 0);
+        coin_push      : in std_logic;
+        coin_amt       : in std_logic_vector(11 downto 0);
+            --outputs
+        soda_drop      : out std_logic;
+        deposit_incr   : out std_logic;
+        deposit_decr   : out std_logic;
+        coin_reject    : out std_logic;
+        error_amt      : out std_logic;
+        error_reserved : out std_logic
         );
+
 end vending_machine_ctrl;
 
 architecture Behavioral of vending_machine_ctrl is
@@ -37,10 +36,9 @@ architecture Behavioral of vending_machine_ctrl is
     SIGNAL VEND_STATE : STATE;
 
 begin
-
     -- Case Statements for Each State
     FSM_Vend : PROCESS(CLK, RST)
-    begin
+    BEGIN
         IF(rst = '0') THEN
             VEND_STATE <= IDLE;
         ELSIF rising_edge(CLK) THEN
@@ -98,11 +96,11 @@ begin
     END PROCESS;
 
     -- Outputs For State Cases
-    deposit_incr <= '1' WHEN (STATE = COIN_ACCEPT) ELSE '0';
-    coin_reject <= '1' WHEN (STATE = COIN_DECLINE) ELSE '0';
-    deposit_decr <= '1' WHEN (STATE = SODA_ACCEPT) ELSE '0';
-    error_amt <= '1' WHEN (STATE = SODA_DECLINE_AMT) ELSE '0';
-    soda_drop <= '1' WHEN (STATE = SODA_ACCEPT_WAIT) ELSE '0';
-    error_reserved <= '1' WHEN (STATE = SODA_DECLINE_RESERVED) ELSE '0';
+    deposit_incr <= '1' WHEN (VEND_STATE = COIN_ACCEPT) ELSE '0';
+    coin_reject <= '1' WHEN (VEND_STATE = COIN_DECLINE) ELSE '0';
+    deposit_decr <= '1' WHEN (VEND_STATE = SODA_ACCEPT) ELSE '0';
+    error_amt <= '1' WHEN (VEND_STATE = SODA_DECLINE_AMT) ELSE '0';
+    soda_drop <= '1' WHEN (VEND_STATE = SODA_ACCEPT_WAIT) ELSE '0';
+    error_reserved <= '1' WHEN (VEND_STATE = SODA_DECLINE_RESERVED) ELSE '0';
 
 end Behavioral;
