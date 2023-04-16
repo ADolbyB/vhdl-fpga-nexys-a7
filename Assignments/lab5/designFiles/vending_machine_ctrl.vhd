@@ -1,14 +1,16 @@
 -- Joel Brigida
 -- CDA 4240C: Digital Design Lab
 -- This is the Finite State Machine Controller for the Vending Machine Subsystem
+-- Note that when pushing a coin, the coin is rejected when the deposit amount exceeds $10.00
 
+-- FINITE STATE MACHINE
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity vending_machine_ctrl is
     Port ( 
-            -- inputs
+        -- inputs
         clk            : in std_logic;
         rst            : in std_logic;
         lock           : in std_logic;
@@ -18,7 +20,7 @@ entity vending_machine_ctrl is
         deposit_amt    : in std_logic_vector(11 downto 0);
         coin_push      : in std_logic;
         coin_amt       : in std_logic_vector(11 downto 0);
-            --outputs
+        --outputs
         soda_drop      : out std_logic;
         deposit_incr   : out std_logic;
         deposit_decr   : out std_logic;
@@ -39,59 +41,52 @@ begin
     -- Case Statements for Each State
     FSM_Vend : PROCESS(CLK, RST)
     BEGIN
-        IF(rst = '0') THEN
-            VEND_STATE <= IDLE;
-        ELSIF rising_edge(CLK) THEN
-            CASE VEND_STATE IS
+        IF rising_edge(CLK) THEN
+            IF(rst = '0') THEN
+                VEND_STATE <= IDLE;
+            ELSE CASE VEND_STATE IS
                 WHEN IDLE =>
-                    IF soda_req = '1' THEN
-                        VEND_STATE <= SODA_CHECK;
-                    ELSIF coin_push = '1' THEN
+                    IF coin_push = '1' THEN
                         VEND_STATE <= COIN_CHECK;
-                    ELSE
-                        VEND_STATE <= IDLE;
+                    ELSIF soda_req = '1' THEN
+                        VEND_STATE <= SODA_CHECK;
                     END IF;
-                WHEN COIN_CHECK => -- $10.00 = 3E8 in hex 
-                    IF unsigned(coin_amt) + unsigned(deposit_amt) <= X"3E8" THEN
-                        VEND_STATE <= COIN_ACCEPT;
-                    ELSE -- Deposit Amount > $10.00
-                        VEND_STATE <= COIN_DECLINE;
+                WHEN COIN_CHECK =>
+                    IF unsigned(coin_amt) + unsigned(deposit_amt) > X"3E8" THEN
+                        VEND_STATE <= COIN_DECLINE; -- $10.00 = 3E8 in hex 
+                    ELSE
+                        VEND_STATE <= COIN_ACCEPT;  -- Deposit Amount <= $10.00
                     END IF;
                 WHEN COIN_ACCEPT =>
                     VEND_STATE <= IDLE;
                 WHEN COIN_DECLINE =>
-                    VEND_STATE <= IDLE;
+                    IF (lock = '0') THEN
+                        VEND_STATE <= IDLE;
+                    END IF;
                 WHEN SODA_CHECK =>
                     IF soda_reserved = '1' THEN
                         VEND_STATE <= SODA_DECLINE_RESERVED;
-                    ELSIF (deposit_amt >= soda_price) THEN
+                    ELSIF (deposit_amt > soda_price) THEN
                         VEND_STATE <= SODA_ACCEPT;
                     ELSIF (deposit_amt <= soda_price) THEN
                         VEND_STATE <= SODA_DECLINE_AMT;
-                    ELSE -- THIS SHOULD NOT HAPPEN
-                        VEND_STATE <= IDLE; -- Prevent Hanging In Case of Invalid Input
                     END IF;
                 WHEN SODA_DECLINE_AMT =>
                     IF lock = '0' THEN
                         VEND_STATE <= IDLE;
-                    ELSE
-                        VEND_STATE <= SODA_DECLINE_AMT; -- Do I need this??
                     END IF;
                 WHEN SODA_DECLINE_RESERVED =>
                     IF lock = '0' THEN
                         VEND_STATE <= IDLE;
-                    ELSE
-                        VEND_STATE <= SODA_DECLINE_RESERVED; -- Do I need this??
                     END IF;
                 WHEN SODA_ACCEPT =>
                     VEND_STATE <= SODA_ACCEPT_WAIT;
                 WHEN SODA_ACCEPT_WAIT =>
                     IF lock = '0' THEN
                         VEND_STATE <= IDLE;
-                    ELSE
-                        VEND_STATE <= SODA_ACCEPT_WAIT; -- Do I need this??
                     END IF;
-            END CASE;
+                END CASE;
+            END IF;
         END IF;
     END PROCESS;
 
