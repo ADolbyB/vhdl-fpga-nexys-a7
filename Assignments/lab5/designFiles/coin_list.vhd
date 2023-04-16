@@ -2,8 +2,10 @@
 -- CDA 4240C: Digital Design Lab
 -- This is the Coin List Entity For The Vending Machine
 
+-- COIN LIST
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity coin_list is
     PORT(
@@ -13,14 +15,18 @@ entity coin_list is
 end coin_list;
 
 architecture data_flow of coin_list is
+    
+    signal COIN_SIG : unsigned(11 downto 0) := X"000";
 
 begin
     
-    WITH coin_sel SELECT coin_amt
-        <= "000000000001" WHEN "00", -- Penny
-           "000000000101" WHEN "01", -- Nickel
-           "000000001010" WHEN "10", -- Dime
-           "000000011001" WHEN "11", -- Quarter
-           "000000000000" WHEN OTHERS;
+    WITH coin_sel SELECT
+        COIN_SIG <= X"001" WHEN "00", -- Penny
+                    X"005" WHEN "01", -- Nickel
+                    X"00A" WHEN "10", -- Dime
+                    X"019" WHEN "11", -- Quarter
+                    X"000" WHEN OTHERS;
+     
+     coin_amt <= std_logic_vector(COIN_SIG);
      
 end data_flow;
