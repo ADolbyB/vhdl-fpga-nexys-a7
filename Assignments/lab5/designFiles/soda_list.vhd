@@ -2,6 +2,7 @@
 -- CDA 4240C: Digital Design Lab
 -- This is the Soda List Entity For The Vending Machine
 
+-- SODA LIST
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -29,8 +30,7 @@ begin
            X"0FA" WHEN "0111", -- Soda 1 = $2.50
            X"12C" WHEN "1000", -- Soda 1 = $3.00
            X"000" WHEN OTHERS; -- Soda Reserved
-           
-    -- soda_reserved <= '1' WHEN soda_sel > "1000" ELSE '0'; -- Set Soda Reserved Flag for Invalid Sodas.
+
     soda_reserved <= '1' WHEN unsigned(soda_sel) > 8 ELSE '0'; -- Set Soda Reserved Flag for Invalid Sodas.
 
 end dataflow;
