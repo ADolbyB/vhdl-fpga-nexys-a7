@@ -12,7 +12,7 @@ This is a collection of code from CDA 4240C: Design of Digital Systems.
 
 <div align="center">
 
-<img src="./Assets/NexysA7.jpg" alt="FPGA" width="500"/>
+<img src="./Assets/NexysA7.jpg" alt="FPGA" width="500"/><br>
 
 <small>
     <a href="https://digilent.com/shop/nexys-a7-fpga-trainer-board-recommended-for-ece-curriculum/">
