@@ -1,0 +1,2 @@
+# Classify .xdc as VHDL constraints files:
+*.xdc linguist-language=VHDL
